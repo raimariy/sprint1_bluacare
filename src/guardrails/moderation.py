@@ -32,9 +32,11 @@ PADROES_JAILBREAK = [
 
 # Padrões de conteúdo perigoso
 PADROES_PERIGOSOS = [
-    r"(dosagem|quantidade).{0,20}(matar|overdose|letal|fatal)",
-    r"(como|quero).{0,20}(me matar|suicídio|acabar com)",
-    r"(dose|quantidade).{0,15}(paracetamol|ibuprofeno).{0,20}(overdose|letal)",
+    r"(dosagem|quantidade|dose).{0,30}(matar|overdose|letal|fatal|morte)",
+    r"(como|quero|vou).{0,20}(me matar|suicídio|acabar com a minha vida)",
+    r"(paracetamol|ibuprofeno).{0,30}(matar|overdose|letal|fatal)",
+    r"(matar|overdose|letal).{0,30}(paracetamol|ibuprofeno|remédio)",
+    r"pode.{0,10}matar",
 ]
 
 

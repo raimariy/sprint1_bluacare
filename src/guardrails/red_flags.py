@@ -49,8 +49,10 @@ PADROES_RED_FLAG = {
         "nivel": "emergencia",
         "descricao": "Comprometimento respiratório grave",
         "padroes": [
-            r"spo2.{0,10}(8[0-9]|9[01])\b",
+            r"spo2.{0,15}(8[0-9]|9[01])\b",
             r"saturação.{0,15}(8[0-9]|9[01])\b",
+            r"(8[0-9]|9[01]).{0,10}(spo2|saturação)",
+            r"caiu.{0,15}(8[0-9])\b",
             r"falta de ar.{0,20}repous",
             r"não consigo (respirar|pegar ar)",
             r"sufocando|sufocamento",
