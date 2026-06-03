@@ -10,6 +10,8 @@
 | Natalia Heloisa Rocha de Alcantara Bezerra | 568570 |
 | Raissa Marinho de Jesus Viana | 568301 |
 
+> **Nota:** Este README documenta principalmente as entregas da **Sprint 1**. A documentação completa da **Sprint 2**, incluindo arquitetura multiagente, RAG, guardrails, evals, testes e roadmap, está disponível no arquivo `relatorio_final.md`.
+
 ---
 
 ## Persona Escolhida: Beneficiário Final
