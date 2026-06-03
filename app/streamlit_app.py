@@ -140,10 +140,31 @@ else:
                 else:
                     # 2. Executa pelo grafo
                     try:
-                        estado = estado_inicial(
-                            mensagem=prompt,
+                        # ✅ FIX: monta o estado manualmente para incluir o histórico
+                        # (sem o histórico, o agente não lembra o que já perguntou
+                        #  e acaba repetindo perguntas ou respondendo em inglês)
+                        from src.graph.state import BluaState
+
+                        # Histórico EXCLUINDO a mensagem atual (já adicionada acima)
+                        # para não duplicar — passamos só as anteriores
+                        historico_anterior = st.session_state.historico[:-1]
+
+                        estado = BluaState(
+                            mensagem_atual=prompt,
+                            historico=historico_anterior,  
                             paciente_id=st.session_state.paciente_id,
+                            sintomas_coletados=[],
+                            urgencia="rotina",
+                            red_flag_detectada=False,
+                            escalada_ativada=False,
+                            triagem_encerrada=False,
+                            contexto_rag="",
+                            intencao="triagem",
+                            proxima_acao="triagem",
+                            resposta_final="",
+                            agente_usado="",
                         )
+
                         resultado = st.session_state.grafo.invoke(estado)
 
                         resposta = resultado.get("resposta_final", "")
