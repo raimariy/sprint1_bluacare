@@ -18,7 +18,7 @@ from src.guardrails.red_flags import verificar_red_flag
 # CONFIGURAÇÃO DA PÁGINA
 # ============================================================
 st.set_page_config(
-    page_title="BluaDiagnostics — Care Plus",
+    page_title="BluaDiagnostics",
     page_icon="🩺",
     layout="centered",
 )
@@ -42,7 +42,7 @@ if "paciente_id" not in st.session_state:
 # CABEÇALHO
 # ============================================================
 st.title("🩺 BluaDiagnostics")
-st.caption("Assistente de saúde digital — Care Plus (Part of Bupa)")
+st.caption("Assistente de saúde digital")
 st.divider()
 
 # ============================================================
@@ -91,7 +91,7 @@ with st.sidebar:
 if not st.session_state.historico:
     with st.chat_message("assistant"):
         st.markdown(
-            "Olá! Sou o **BluaAssistente** da Care Plus. 👋\n\n"
+            "Olá! Sou o **BluaAssistente** 👋\n\n"
             "Estou aqui para te ajudar com:\n"
             "- 🔍 Triagem de sintomas\n"
             "- 💊 Verificação de medicamentos\n"
