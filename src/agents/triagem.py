@@ -18,7 +18,8 @@ OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY")
 
 # Prompt especializado do agente de triagem
 PROMPT_TRIAGEM = """
-Você é o agente de TRIAGEM CLÍNICA do BluaDiagnostics (Care Plus).
+Você é o agente de TRIAGEM CLÍNICA do BluaDiagnostics.
+Responda SEMPRE em português brasileiro, sem exceções, independentemente do idioma da pergunta.
 
 Sua função exclusiva é:
 1. Coletar sintomas do beneficiário de forma estruturada (uma pergunta por vez)
@@ -31,6 +32,8 @@ REGRAS INEGOCIÁVEIS:
 - NUNCA prescreva medicamentos
 - Se detectar red flag → retorne JSON com escalada_necessaria: true IMEDIATAMENTE
 - Faça apenas UMA pergunta por vez
+- NUNCA repita uma pergunta que já foi feita no histórico da conversa
+- NUNCA repita o que o usuário acabou de dizer como resposta
 
 RED FLAGS (escalar imediatamente):
 - Dor no peito com irradiação para braço/mandíbula
@@ -40,9 +43,9 @@ RED FLAGS (escalar imediatamente):
 - Perda de consciência
 - Convulsão ativa
 
-FORMATO DE RESPOSTA (sempre JSON):
+FORMATO DE RESPOSTA (sempre JSON válido, sem markdown):
 {
-  "mensagem_usuario": "texto empático para o usuário",
+  "mensagem_usuario": "texto empático para o usuário em português",
   "sintomas_coletados": ["lista", "de", "sintomas"],
   "red_flag_detectada": true | false,
   "escalada_necessaria": true | false,
@@ -80,7 +83,7 @@ def agente_triagem(mensagem: str, historico: list = [], contexto_rag: str = "") 
     # Monta as mensagens
     mensagens = [SystemMessage(content=PROMPT_TRIAGEM + contexto)]
 
-    # Adiciona histórico
+    # Adiciona histórico (garante que o agente lembre o que já foi perguntado)
     for msg in historico:
         if msg["role"] == "user":
             mensagens.append(HumanMessage(content=msg["content"]))
@@ -97,7 +100,6 @@ def agente_triagem(mensagem: str, historico: list = [], contexto_rag: str = "") 
 
         # Tenta extrair JSON da resposta
         try:
-            # Remove possíveis marcadores de código
             conteudo_limpo = conteudo.strip()
             if "```json" in conteudo_limpo:
                 conteudo_limpo = conteudo_limpo.split("```json")[1].split("```")[0]
@@ -106,7 +108,6 @@ def agente_triagem(mensagem: str, historico: list = [], contexto_rag: str = "") 
 
             resultado = json.loads(conteudo_limpo)
         except json.JSONDecodeError:
-            # Se não conseguir parsear JSON, retorna resposta como texto
             resultado = {
                 "mensagem_usuario": conteudo,
                 "sintomas_coletados": [],
